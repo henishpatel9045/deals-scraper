@@ -7,7 +7,7 @@ WORKDIR /usr/sugarwallet/backend
 
 COPY ./package.json ./
 
-RUN npm ci
+RUN npm i
 
 COPY . .
 
