@@ -7,7 +7,8 @@ const dotenv = require("dotenv")
 const Scrape = require("./Scrapers/scrape");
 const helmet = require("helmet")
 
-const DB_URL = "mongodb://localhost:27017/sugarwallet";
+// const DB_URL = "mongodb://localhost:27017/sugarwallet";
+const DB_URL = "mongodb+srv://henish9045:henish%409045@cluster0.dqyvu6w.mongodb.net/sugarwallet"
 
 const DataModel = require("./models/DataModel");
 const router = require("./routes");
