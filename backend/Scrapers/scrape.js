@@ -24,7 +24,19 @@ const storeNames = async (page, url) => {
 };
 
 const main = async () => {
-  const browser = await puppetter.launch({ headless: true });
+  const browser = await puppetter.launch({
+    headless: true,
+    args: [
+      "--disable-setuid-sandbox",
+      "--no-sandbox",
+      "--single-process",
+      "--no-zygote",
+    ],
+    executablePath:
+      process.env.NODE_ENV === "production"
+        ? process.env.PUPPETEER_EXECUTABLE_PATH
+        : puppetter.executablePath(),
+  });
   const page = await browser.newPage();
   await page.setRequestInterception(true);
   page.on("request", (req) => {
@@ -45,10 +57,9 @@ const main = async () => {
   });
 
   let offersData = [];
-  let counter = 1
-  let totalOutlets = 0
-  for (let city in cities)
-    totalOutlets += Object.keys(cities[city]).length
+  let counter = 1;
+  let totalOutlets = 0;
+  for (let city in cities) totalOutlets += Object.keys(cities[city]).length;
   // let counter = 0;
   for (let city in cities) {
     let outlets = cities[city];
@@ -59,7 +70,11 @@ const main = async () => {
         //   break;
         // }
         let outlet = outlets[ind];
-        console.log(outlet?.web_slug, Math.fround((counter++/totalOutlets) * 100), "%");
+        console.log(
+          outlet?.web_slug,
+          Math.fround((counter++ / totalOutlets) * 100),
+          "%"
+        );
         let outletUrl = "https://lapinozpizza.in/order/" + outlet?.web_slug;
         let offers = await storeNames(page, outletUrl);
         cityData.outlets.push({
