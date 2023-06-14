@@ -28,7 +28,7 @@ export default function StoreCard({ storeName = "", image = "", city = 0, outlet
                     </Text>
                 </Stack>
                 <Button colorScheme="teal" mb={8} onClick={() => {
-                    nav(navigateURL)
+                    location.href = navigateURL
                 }} >
                     Select City
                 </Button>

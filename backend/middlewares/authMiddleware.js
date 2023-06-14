@@ -8,7 +8,7 @@ const generateToken = (data) => {
 };
 
 const verifyMiddleware = (req, res, next) => {
-  const authHeader = rea.headers["authorization"];
+  const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 
   if (!authHeader) res.status(401).send({ detail: "User not authenticated." });

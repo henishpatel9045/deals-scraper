@@ -1,7 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
-
+const bodyParser = require("body-parser");
+const cors = require("cors")
+const morgan = require("morgan")
+const dotenv = require("dotenv")
 const Scrape = require("./Scrapers/scrape");
+const helmet = require("helmet")
 
 const DB_URL = "mongodb://localhost:27017/sugarwallet";
 
@@ -14,17 +18,30 @@ mongoose.connect(DB_URL, {
   useUnifiedTopology: true,
 });
 mongoose.connection.on("error", () => {
-  console.log(`unable to connect to database: ${url}`);
+  console.log(`unable to connect to database: ${DB_URL}`);
 });
+
+dotenv.config()
 
 const app = express();
 
+app.use(morgan("dev"))
+app.use(helmet())
+app.use(cors())
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.get("/scrape", async (req, res) => {
-  const data = await Scrape();
-  await DataModel.create({
-    data: data,
-  });
-  res.status(201).send("Data Successfully scraped.");
+  try {
+    const data = await Scrape();
+    await DataModel.create({
+      ...data
+    });
+    res.status(201).send("Data Successfully scraped.");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({detail: "Error occurred."})
+  }
 });
 app.use("/", router);
 

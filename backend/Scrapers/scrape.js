@@ -3,17 +3,22 @@ const puppetter = require("puppeteer");
 const storeNames = async (page, url) => {
   await page.goto(url);
   await page.waitForSelector("li.second-li");
-  const demo = await page.evaluate(() => {
+  const demo = await page.evaluate((url) => {
     console.log("start");
     let offers = Array.from(document.querySelectorAll("li.second-li"));
-
-    return offers.map((i) => {
-      return {
-        offer: i.firstChild.textContent,
-        promo: i.lastChild.textContent,
-      };
-    });
-  });
+    console.log(offers);
+    let response = [];
+    for (let ind = 0; ind < offers.length - 1; ind++) {
+      openPromoModal(ind);
+      let offerModal = document.querySelector("#promo-d > p");
+      response.push({
+        offer: offerModal.textContent,
+        promo: offers[ind].lastChild.textContent?.replace("Use Code", ""),
+        url: url,
+      });
+    }
+    return response;
+  }, url);
 
   return demo;
 };
@@ -40,6 +45,10 @@ const main = async () => {
   });
 
   let offersData = [];
+  let counter = 1
+  let totalOutlets = 0
+  for (let city in cities)
+    totalOutlets += Object.keys(cities[city]).length
   // let counter = 0;
   for (let city in cities) {
     let outlets = cities[city];
@@ -50,7 +59,7 @@ const main = async () => {
         //   break;
         // }
         let outlet = outlets[ind];
-        console.log(outlet?.web_slug);
+        console.log(outlet?.web_slug, Math.fround((counter++/totalOutlets) * 100), "%");
         let outletUrl = "https://lapinozpizza.in/order/" + outlet?.web_slug;
         let offers = await storeNames(page, outletUrl);
         cityData.outlets.push({
@@ -65,7 +74,11 @@ const main = async () => {
     }
     offersData.push(cityData);
   }
-  return offersData;
+  return {
+    data: offersData,
+    storeName: "La Pino'z Pizza",
+    image: "https://www.uengage.in/images/addo/logos/logo-5-1600769708.png",
+  };
 };
 
 module.exports = main;

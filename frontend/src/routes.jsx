@@ -4,6 +4,10 @@ import Login from "./app/pages/Login"
 import PrivateRoutes from "./app/components/PrivateRoutes"
 import NotFound404 from "./app/pages/NotFound404"
 import StoresPage from "./app/pages/StoresPage"
+import UserDetail from "./app/pages/UserDetail"
+import OutletSelect from "./app/pages/OutletSelect"
+import Deals from "./app/pages/Deals"
+import Register from "./app/pages/Register"
 
 const routes = createBrowserRouter([
   {
@@ -11,24 +15,33 @@ const routes = createBrowserRouter([
     children: [{
       path: "login",
       element: <Login />
+    },
+    {
+      path: "register",
+      element: <Register />
     }]
-  },
-  {
-    path: "/store",
-    element: <StoresPage />
   },
   {
     path: "/",
     element: <PrivateRoutes />,
     children: [
       {
-        path: "/home",
-        element: <h1>Home</h1>
+        path: "user",
+        element: <UserDetail />
       },
       {
-        path: "/dashboard",
-        element: <h1>Dashboard</h1>
-      },]
+        path: "store/:storeName/:city/:outletName/offers",
+        element: <Deals />
+      },
+      {
+        path: "store/:storeName",
+        element: <OutletSelect />
+      },
+      {
+        path: "store",
+        element: <StoresPage />,
+      },
+    ]
   },
   {
     path: "*",

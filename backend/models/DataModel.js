@@ -5,10 +5,11 @@ const DataSchema =new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  store: {
+  storeName: {
     type: String,
     required: false,
   },
+  image: String,
   data: [
     mongoose.Schema({
       city: String,

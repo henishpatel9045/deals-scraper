@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 
     Stack,
@@ -6,19 +6,34 @@ import {
 
 } from '@chakra-ui/react';
 import StoreCard from '../components/StoreCard';
+import { getStores } from '../../api/apis';
+import ProfileBtn from '../components/ProfileBtn';
 
 const StoresPage = () => {
+    const [stores, setStores] = useState([])
 
+    const getData = async () => {
+        const data = await getStores()
+        
+        setStores(data)
+    }
+
+    useEffect(() => {
+        getData()
+    }, [])
 
     return (
         <Stack h="100vh" alignItems="center" justifyContent="flex-start" pt="6" w="100vw">
+            <ProfileBtn/>
             <Text as={"h1"} pb={6} fontWeight="bold">Stores</Text>
-            <StoreCard
-                storeName='Lapinoz Pizza'
-                image='https://www.uengage.in/images/addo/logos/logo-5-1600769708.png'
-                city={10}
-                outlets={84}
-                navigateURL='/store/lapinoz' />
+            {stores?.map((val, ind) => {
+                return <StoreCard
+                storeName={val?.storeName}
+                image={val?.image}
+                city={val?.totalCities}
+                outlets={val?.totalOutlets}
+                navigateURL={`/store/${val?.storeName}`} />
+            })}
         </Stack>
     );
 };

@@ -1,10 +1,12 @@
 const mongoose = require("mongoose");
+const crypto = require("crypto")
 
 const UserSchema = new mongoose.Schema(
   {
     username: {
       type: String,
       required: true,
+      unique: true
     },
     encryptedPassword: {
       type: String,
@@ -24,16 +26,16 @@ const UserSchema = new mongoose.Schema(
   { strict: false }
 );
 
-UserSchema.virtual("password").set((password) => {
+UserSchema.virtual("password").set(function (password) {
   this._password = password;
   this.salt = this.makeSalt();
   this.encryptedPassword = this.encryptPassword(password);
 });
 
 UserSchema.methods = {
-  makeSale: function () {
-    return Math.round(new Date().valueOf() * Math.random()) + "";
-  },
+  makeSalt: function () {
+    return Math.round((new Date().valueOf() * Math.random() + ""))
+},
   encryptPassword: function (password) {
     if (!password) return "";
     return crypto.createHmac("sha1", this.salt).update(password).digest("hex");

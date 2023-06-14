@@ -26,7 +26,7 @@ export default function NotFound404() {
         w="fit-content"
         variant="solid"
         onClick={() => {
-          nav("/home")
+          nav("/auth/login")
         }}
       >
         Go to Home
