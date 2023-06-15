@@ -5,6 +5,7 @@ import {
     Input,
     Button,
     useColorModeValue,
+    Spinner,
 } from '@chakra-ui/react';
 import { createUser } from '../../api/apis';
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 const Register = () => {
     const formBackground = useColorModeValue('gray.100', 'gray.700');
     const [username, setUsername] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const nav = useNavigate()
@@ -27,14 +29,19 @@ const Register = () => {
     }
 
     const handleSubmit = async () => {
+        setIsLoading(true)
         if (username && password) {
-            if (password !== confirmPassword)
+            if (password !== confirmPassword) {
+                setIsLoading(false)
                 return alert("Password dose not match.")
+            }
 
             const data = await createUser(username, password)
 
-            if (data?.detail)
+            if (data?.detail) {
+                setIsLoading(false)
                 return alert(data.detail)
+            }
             nav("/auth/login")
         }
     }
@@ -72,7 +79,7 @@ const Register = () => {
                     onChange={handleConfirmPasswordChange}
                 />
                 <Button colorScheme="teal" mb={3} onClick={handleSubmit}>
-                    Register
+                    {isLoading ? <Spinner size="md" /> : "Register"}
                 </Button>
                 <Button variant="outline" colorScheme="teal" mb={8} onClick={() => nav("/auth/login")}>
                     Already a user? Login

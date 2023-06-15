@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom"
+import { Navigate, createBrowserRouter } from "react-router-dom"
 
 import Login from "./app/pages/Login"
 import PrivateRoutes from "./app/components/PrivateRoutes"
@@ -10,6 +10,10 @@ import Deals from "./app/pages/Deals"
 import Register from "./app/pages/Register"
 
 const routes = createBrowserRouter([
+  {
+    path: "/",
+    element: <Navigate to="/auth/login" />
+  },
   {
     path: "/auth",
     children: [{

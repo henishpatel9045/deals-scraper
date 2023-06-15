@@ -5,6 +5,7 @@ import {
     Input,
     Button,
     useColorModeValue,
+    Spinner,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { getToken } from '../../api/apis';
@@ -14,6 +15,7 @@ const Login = () => {
     const formBackground = useColorModeValue('gray.100', 'gray.700');
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
     const nav = useNavigate()
     const { isLoggedIn } = useContext(AuthContext)
 
@@ -25,21 +27,25 @@ const Login = () => {
     }
 
     const handleSubmit = async () => {
+        setIsLoading(true)
         if (username && password) {
             const data = await getToken(username, password)
             console.log(data);
-            if (data?.detail)
+            if (data?.detail){
+                setIsLoading(false)
                 return alert(data.detail)
+            }
             localStorage.setItem("JWT", data.token)
             data.token = undefined
             data.success = undefined
             localStorage.setItem("USER", JSON.stringify(data))
             nav("/store")
-        }
+        }        
     }
 
     return (
         <Flex h="100vh" alignItems="center" justifyContent="center" w="100vw" p="1rem 1rem">
+            {/* {isLoading && } */}
             <Flex
                 w={{ md: "50vw", lg: "30vw" }}
                 flexDirection="column"
@@ -64,7 +70,7 @@ const Login = () => {
                     onChange={handlePasswordChange}
                 />
                 <Button colorScheme="teal" mb={3} onClick={handleSubmit}>
-                    Log In
+                    {isLoading ? <Spinner size="md" /> : "Log In"}
                 </Button>
                 <Button variant="outline" colorScheme="teal" mb={8} onClick={() => nav("/auth/register")}>
                     New user? Register yourself

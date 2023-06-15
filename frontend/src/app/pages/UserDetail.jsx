@@ -1,4 +1,4 @@
-import { Avatar, HStack, Select, Stack, Flex, Text, useColorModeValue, Input, Button } from '@chakra-ui/react';
+import { Avatar, HStack, Select, Stack, Flex, Text, useColorModeValue, Input, Button, Spinner } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../context/Context';
 import { getAllCities, updateCity } from '../../api/apis';
@@ -10,13 +10,17 @@ export default function UserDetail() {
     const { user = {}, jwt } = useContext(AuthContext)
     const [city, setCity] = useState("")
     const [citiesName, setCitiesName] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
     const nav = useNavigate()
 
     const handleSubmit = async () => {
+        setIsLoading(true)
         const data = await updateCity(jwt, city)
         localStorage.setItem("USER", JSON.stringify(data))
-        if (data?.detail)
+        if (data?.detail){
+            setIsLoading(false)
             alert(data.detail)
+        }
         return nav("/store")
     }
 
@@ -54,7 +58,7 @@ export default function UserDetail() {
                     </Select>
                 </HStack>
                 <Button type='button' variant="solid" colorScheme='cyan' onClick={handleSubmit} isDisabled={!jwt}>
-                    Save
+                    {isLoading ? <Spinner size="md" /> : "Save"}
                 </Button>
             </Stack>
         </Flex>
