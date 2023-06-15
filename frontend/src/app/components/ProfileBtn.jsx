@@ -10,7 +10,7 @@ export default function ProfileBtn() {
     const { colorMode, toggleColorMode } = useColorMode();
 
     return (
-        <HStack position="absolute" top="1rem" right="1rem" spacing={2}>
+        <HStack position="absolute" top={{ base: "1.5rem", md: "1rem" }} right={{ base: "0.5rem", md: "1rem" }} spacing={1}>
             <Button onClick={toggleColorMode}>
                 {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
             </Button>

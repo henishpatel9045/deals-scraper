@@ -26,15 +26,15 @@ export default function Deals() {
     }, [])
 
     return (
-        <Flex flexDirection="column" h="100vh" w="100vw" p="5" justifyContent={data ? "normal" : "center"}>
+        <Flex flexDirection="column" h="100vh" w="100vw" p="5" pt={{base: "6rem", lg: "5"}} justifyContent={data ? "normal" : "center"}>
             <BackNav to={`/store/${storeName}`} />
             <ProfileBtn/>
             {data ? <>
-                <Text as="h1" alignSelf={"center"} fontWeight={"bold"}>
+                <Text as="h1" alignSelf={"center"} fontWeight={"bold"} fontSize={{base: "4xl"}}>
                     {storeName}
                 </Text>
                 <HStack pt={10}>
-                    <Text as="h2" fontSize="2xl" fontWeight={"semibold"}>{city}</Text> <Divider orientation='vertical' /> <Text as="h2" fontSize="2xl" fontWeight={"semibold"}>{outletName}</Text>
+                    <Text as="h2" fontSize={{base: "xl", lg: "2xl"}} fontWeight={"semibold"}>{city}</Text> <Divider orientation='vertical' /> <Text as="h2" fontSize={{base: "xl", lg: "2xl"}} fontWeight={"semibold"}>{outletName}</Text>
                 </HStack>
                 <TableContainer pt={4} overflowY={"scroll"}>
                     <Table bg={formBackground} variant="striped" colorScheme='facebook' w="100%" borderRadius={10} >
@@ -52,9 +52,9 @@ export default function Deals() {
                                     {ind + 1}.
                                 </Td>
                                 <Td
-                                    wordBreak="break-word"
+                                    maxW={{base: "80vw", lg: "40vw"}}
+                                    wordBreak={{base: "normal", lg:"break-word"}}
                                     whiteSpace="normal"
-                                    textOverflow="ellipsis"
                                 >{e?.offer}</Td>
                                 <Td><Badge borderRadius={5} variant="outline" onClick={e => navigator.clipboard.writeText(e?.promo)} _hover={{ cursor: "pointer" }} colorScheme='cyan'>{e?.promo}</Badge></Td>
                                 <Td>

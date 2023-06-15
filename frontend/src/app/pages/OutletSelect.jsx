@@ -1,4 +1,4 @@
-import { HStack, Select, Stack, Flex, Text, useColorModeValue, Button, Divider } from '@chakra-ui/react';
+import { HStack, Select, Stack, Flex, Text, useColorModeValue, Button, Divider, Box } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react'
 import BackNav from '../components/BackNav';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -43,25 +43,31 @@ export default function OutletSelect() {
             <BackNav to="/store" />
             <ProfileBtn />
             <Stack spacing={10} w={{ sm: "80vw", md: "70vw" }} bg={formBackground} p="5rem 3rem" borderRadius={10}>
-                <HStack spacing={10}>
-                    <Text fontWeight={"bold"} fontSize={"xl"}>
-                        City:
-                    </Text>
-                    <Select variant="outline" value={city} onChange={e => setCity(e.target.value)}>
-                        {
-                            Object.keys(cities).sort()?.map((val, ind) => <option value={val} key={ind}>{val}</option>)
-                        }
-                    </Select>
-                    <Divider orientation='vertical' />
-                    <Text fontWeight={"bold"} fontSize={"xl"}>
-                        Outlet:
-                    </Text>
-                    <Select variant="outline" value={outlet} onChange={e => setOutlet(e.target.value)}>
-                        {
-                            outlets?.map((val, ind) => <option value={val} key={ind}>{val}</option>)
-                        }
-                    </Select>
-                </HStack>
+                <Flex alignItems="center" justifyContent="center" gap={1} flexDirection={{ base: "column", md: "row" }}>
+                    <HStack w="100%">
+
+                        <Text fontWeight={"bold"} fontSize={"xl"}>
+                            City:
+                        </Text>
+                        <Select variant="outline" value={city} onChange={e => setCity(e.target.value)}>
+                            {
+                                Object.keys(cities).sort()?.map((val, ind) => <option value={val} key={ind}>{val}</option>)
+                            }
+                        </Select>
+                    </HStack>
+                    <Divider orientation={{ base: "horizontal", md: 'vertical' }} />
+                    <HStack w="100%">
+
+                        <Text fontWeight={"bold"} fontSize={"xl"}>
+                            Outlet:
+                        </Text>
+                        <Select variant="outline" value={outlet} onChange={e => setOutlet(e.target.value)}>
+                            {
+                                outlets?.map((val, ind) => <option value={val} key={ind}>{val}</option>)
+                            }
+                        </Select>
+                    </HStack>
+                </Flex>
                 <Button type='button' variant="solid" colorScheme='cyan' isDisabled={outlet === "" || !outlet} onClick={handleSubmit}>
                     Get Deals
                 </Button>

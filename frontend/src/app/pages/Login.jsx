@@ -29,7 +29,7 @@ const Login = () => {
             const data = await getToken(username, password)
             console.log(data);
             if (data?.detail)
-                alert(data.detail)
+                return alert(data.detail)
             localStorage.setItem("JWT", data.token)
             data.token = undefined
             data.success = undefined
@@ -39,7 +39,7 @@ const Login = () => {
     }
 
     return (
-        <Flex h="100vh" alignItems="center" justifyContent="center" w="100vw">
+        <Flex h="100vh" alignItems="center" justifyContent="center" w="100vw" p="1rem 1rem">
             <Flex
                 w={{ md: "50vw", lg: "30vw" }}
                 flexDirection="column"

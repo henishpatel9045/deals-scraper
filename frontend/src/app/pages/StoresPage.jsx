@@ -25,7 +25,7 @@ const StoresPage = () => {
     return (
         <Stack h="100vh" alignItems="center" justifyContent="flex-start" pt="6" w="100vw">
             <ProfileBtn/>
-            <Text as={"h1"} pb={6} fontWeight="bold">Stores</Text>
+            <Text as={"h2"} pb={6} fontWeight="bold" fontSize="4xl">Stores</Text>
             {stores?.map((val, ind) => {
                 return <StoreCard
                 storeName={val?.storeName}

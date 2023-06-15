@@ -7,27 +7,29 @@ export default function StoreCard({ storeName = "", image = "", city = 0, outlet
     const nav = useNavigate()
     return (
         <HStack
-            w={{ md: "80vw", lg: "70vw" }}
+            w={{ sm: "10%", lg: "70vw" }}
             bg={formBackground}
-            p={8}
+            p={{ base: 2, lg: 8 }}
+            paddingTop={6}
+            paddingBottom={6}
             borderRadius={8}
             boxShadow="lg"
-            spacing={6}
+            spacing={{ sm: 2, lg: 6 }}
         >
-            <Image src={image} alt={storeName} w="8rem" h="8rem" />
-            <Flex justifyContent="space-between" alignItems="center" h="100%" w="100%" >
-                <Stack>
-                    <Text as="h2" fontSize="2rem" fontWeight="semibold">{storeName}</Text>
+            <Image src={image} alt={storeName} w={{base: "4rem", md: "5rem"}} h={{base: "4rem", md: "5rem"}} />
+            <Flex justifyContent="space-between" alignItems="center" h="100%" w="100%">
+                <Stack mr=".5rem">
+                    <Text as="h2" fontSize="2xl" fontWeight="semibold">{storeName}</Text>
                     <Text as="h3">
                         <Tag variant="subtle" colorScheme='whatsapp'>
-                            <TagLabel fontWeight="bold">{city} Cities</TagLabel>
+                            <TagLabel fontSize={{base: "xs", md: "sm"}} fontWeight="bold">{city} Cities</TagLabel>
                         </Tag>
                         <Tag variant="subtle" colorScheme='blue'>
-                            <TagLabel fontWeight="bold">{outlets} Outlets</TagLabel>
+                            <TagLabel fontSize={{base: "xs", md: "sm"}} fontWeight="bold">{outlets} Outlets</TagLabel>
                         </Tag>
                     </Text>
                 </Stack>
-                <Button colorScheme="teal" mb={8} onClick={() => {
+                <Button size={{base: "sm", md: "md"}} colorScheme="teal" onClick={() => {
                     location.href = navigateURL
                 }} >
                     Select City

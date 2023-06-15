@@ -34,7 +34,7 @@ export default function UserDetail() {
     return (
         <Flex h="100vh" w="100vw" alignItems={"center"} justifyContent={"center"}>
         <BackNav to='/store' />
-            <Stack spacing={10} w={{ sm: "80vw", md: "70vw" }} bg={formBackground} p="5rem 3rem" borderRadius={10}>
+            <Stack spacing={10} w={{ base: "90vw", lg: "70vw" }} bg={formBackground} p="5rem 3rem" borderRadius={10}>
                 <HStack spacing={6}>
                     <Avatar name={user?.username} />
                     <Text as="h2" fontSize={"2xl"}>
