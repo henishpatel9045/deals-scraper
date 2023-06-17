@@ -36,7 +36,7 @@ cd deals-scraper/backend
 3. Build and run the Docker container for the backend:
 ```
 docker build -t deals-scraper-backend .
-docker run -p 8080:8080 -d deals-scraper-backend
+docker run -p 5000:5000 -d deals-scraper-backend
 ```
 
 4. Navigate to the frontend directory:
@@ -47,6 +47,21 @@ cd ../frontend
 5. Install client dependencies:
 ```
 npm install
+```
+
+4. Change backend baseUrl
+```
+frontend/src/api/apis.js
+```
+Change baseUrl in line no. 4 to "http://localhost:5000/
+
+5. Run/Build the fronend 
+```
+npm run dev
+```
+OR
+```
+npm run build
 ```
 
 
