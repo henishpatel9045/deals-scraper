@@ -105,8 +105,38 @@ const getOffers = async (req, res) => {
 
 const createAppData = async (req, res) => {
   try {
-    const data = await NativeAppDataModel.insertMany(req.body);
-    return res.send(data);
+    const { storeName, location, offers } = req.body;
+
+    let doc = await NativeAppDataModel.findOne({ storeName: storeName });
+    if (doc) {
+      const locationIndex = await doc.data.findIndex(
+        (i) => i.location === location
+      );
+
+      if (locationIndex != -1) {
+        doc.data[locationIndex].offers = offers;
+      } else {
+        doc.data.push({ location: location, offers: offers });
+      }
+
+      await doc.save();
+
+      return res.status(201).send(doc);
+    } else {
+      doc = new NativeAppDataModel({
+        storeName: storeName,
+        data: [
+          {
+            location: location,
+            offers: offers,
+          },
+        ],
+      });
+
+      doc = await doc.save();
+
+      return res.send(doc);
+    }
   } catch (error) {
     console.log("createAppData: ", error);
     return res.status(400).send({ detail: "Error occurred." });
@@ -115,24 +145,37 @@ const createAppData = async (req, res) => {
 
 const getAppData = async (req, res) => {
   try {
-    const data = await NativeAppDataModel.find();
+    const location = req.query.location;
+    const data = await NativeAppDataModel.aggregate([
+      {
+        $match: {
+          "data.location": location,
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          storeName: 1,
+          location: { $literal: location },
+          data: { $arrayElemAt: ["$data.offers", 0] },
+        },
+      },
+    ]);
     return res.send(data);
   } catch (error) {
-    console.log("createAppData: ", error);
+    console.log("getAppData: ", error);
     return res.status(400).send({ detail: "Error occurred." });
   }
 };
 
-const removeAppData = async (req, res) => {
+const getCities = async (req, res) => {
   try {
-    const data = await NativeAppDataModel.findByIdAndRemove(req.query.id);
+    const doc = await NativeAppDataModel.distinct("data.location");
 
-    res.send({ detail: "Object successfully deleted.", data: data });
+    return res.send(doc);
   } catch (error) {
-    console.log("removeAppData: ", error);
-    res.status(400).send({
-      detail: "Error occurred.",
-    });
+    console.log("getCities: ", error);
+    return res.status(400).send({ detail: "Error occurred." });
   }
 };
 
@@ -142,5 +185,5 @@ module.exports = {
   getAllStores,
   createAppData,
   getAppData,
-  removeAppData
+  getCities,
 };

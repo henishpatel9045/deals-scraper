@@ -18,7 +18,7 @@ router
 router
   .route("/app/data")
   .get(dataController.getAppData)
-  .post(dataController.createAppData)
-  .delete(dataController.removeAppData);
+  .post(dataController.createAppData);
+router.route("/app/cities").get(dataController.getCities);
 
 module.exports = router;
