@@ -1,4 +1,5 @@
 const DataModel = require("../models/DataModel");
+const NativeAppDataModel = require("../models/NativeAppDataModel");
 
 const getAllStores = async (req, res) => {
   try {
@@ -102,4 +103,44 @@ const getOffers = async (req, res) => {
   }
 };
 
-module.exports = { getAllCities, getOffers, getAllStores };
+const createAppData = async (req, res) => {
+  try {
+    const data = await NativeAppDataModel.insertMany(req.body);
+    return res.send(data);
+  } catch (error) {
+    console.log("createAppData: ", error);
+    return res.status(400).send({ detail: "Error occurred." });
+  }
+};
+
+const getAppData = async (req, res) => {
+  try {
+    const data = await NativeAppDataModel.find();
+    return res.send(data);
+  } catch (error) {
+    console.log("createAppData: ", error);
+    return res.status(400).send({ detail: "Error occurred." });
+  }
+};
+
+const removeAppData = async (req, res) => {
+  try {
+    const data = await NativeAppDataModel.findByIdAndRemove(req.query.id);
+
+    res.send({ detail: "Object successfully deleted.", data: data });
+  } catch (error) {
+    console.log("removeAppData: ", error);
+    res.status(400).send({
+      detail: "Error occurred.",
+    });
+  }
+};
+
+module.exports = {
+  getAllCities,
+  getOffers,
+  getAllStores,
+  createAppData,
+  getAppData,
+  removeAppData
+};

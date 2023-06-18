@@ -1,7 +1,7 @@
 const express = require("express");
 const dataController = require("./controllers/DataController");
 const authController = require("./controllers/UserController");
-const {verifyMiddleware} = require("./middlewares/authMiddleware")
+const { verifyMiddleware } = require("./middlewares/authMiddleware");
 
 const router = express.Router();
 
@@ -15,5 +15,10 @@ router
   .get(verifyMiddleware, authController.getUser)
   .patch(verifyMiddleware, authController.updateUser);
 
-module.exports = router;
+router
+  .route("/app/data")
+  .get(dataController.getAppData)
+  .post(dataController.createAppData)
+  .delete(dataController.removeAppData);
 
+module.exports = router;
