@@ -31,7 +31,7 @@ const Login = () => {
         if (username && password) {
             const data = await getToken(username, password)
             console.log(data);
-            if (data?.detail){
+            if (data?.detail) {
                 setIsLoading(false)
                 return alert(data.detail)
             }
@@ -40,9 +40,10 @@ const Login = () => {
             data.success = undefined
             localStorage.setItem("USER", JSON.stringify(data))
             if (data?.city)
-                nav("/store")
+                location.href = "/store"
             else
-                nav("/user")}        
+                location.href = "/user"
+        }
     }
 
     return (

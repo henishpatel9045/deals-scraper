@@ -19,7 +19,7 @@ function AuthProvider({ children }) {
         <AuthContext.Provider value={{
             isLoggedIn: isLoggedIn,
             jwt: jwt,
-            user, user,
+            user: user,
             setIsLoggedIn: setIsLoggedIn,
             setJwt: setJwt,
             setUser: setUser
