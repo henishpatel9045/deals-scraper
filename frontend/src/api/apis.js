@@ -1,7 +1,8 @@
 import * as apisauce from "apisauce";
 
 const api = apisauce.create({
-  baseURL: "https://api-sugarwallet.onrender.com/",
+  // baseURL: "https://api-sugarwallet.onrender.com/",
+  baseURL: "http://localhost:5000/"
 });
 
 const getToken = async (username, password) => {
@@ -28,12 +29,13 @@ const createUser = async (username, password) => {
   return data.data;
 };
 
-const updateCity = async (token, city) => {
+const updateCity = async (token, city, outlet="") => {
   const data = await api.patch(
     "auth/user",
     {
       tag: "Henish",
       city: city,
+      outlet: outlet
     },
     {
       headers: {

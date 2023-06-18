@@ -18,6 +18,10 @@ const UserSchema = new mongoose.Schema(
     },
     salt: String,
     city: String,
+    outlet: {
+      type: String,
+      required: false
+    },
     createdAt: {
       type: Date,
       default: Date.now(),

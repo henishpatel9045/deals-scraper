@@ -21,6 +21,7 @@ const updateUser = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     user.city = req.body?.city || user.city;
+    user.outlet = req.body?.outlet || user.outlet || ""
     console.log(user);
     console.log(req.body);
     user.updatedAt = Date.now();

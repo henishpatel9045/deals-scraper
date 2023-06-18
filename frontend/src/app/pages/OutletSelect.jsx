@@ -10,8 +10,8 @@ export default function OutletSelect() {
     const formBackground = useColorModeValue('gray.100', 'gray.700');
     const { user } = useContext(AuthContext)
     const [cities, setCities] = useState([])
-    const [outlets, setOutlets] = useState([])
     const [city, setCity] = useState(user?.city)
+    const [outlets, setOutlets] = useState([])
     const [outlet, setOutlet] = useState("")
     const param = useParams()
     const nav = useNavigate()

@@ -39,8 +39,10 @@ const Login = () => {
             data.token = undefined
             data.success = undefined
             localStorage.setItem("USER", JSON.stringify(data))
-            nav("/store")
-        }        
+            if (data?.city)
+                nav("/store")
+            else
+                nav("/user")}        
     }
 
     return (

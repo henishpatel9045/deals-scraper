@@ -27,7 +27,7 @@ export default function Deals() {
 
     return (
         <Flex flexDirection="column" h="100vh" w="100vw" p="5" pt={{base: "6rem", lg: "5"}} justifyContent={data ? "normal" : "center"}>
-            <BackNav to={`/store/${storeName}`} />
+            <BackNav to={`/store`} />
             <ProfileBtn/>
             {data ? <>
                 <Text as="h1" alignSelf={"center"} fontWeight={"bold"} fontSize={{base: "4xl"}}>

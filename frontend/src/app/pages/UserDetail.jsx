@@ -1,4 +1,4 @@
-import { Avatar, HStack, Select, Stack, Flex, Text, useColorModeValue, Input, Button, Spinner } from '@chakra-ui/react';
+import { Avatar, HStack, Select, Stack, Flex, Text, useColorModeValue, Input, Button, Spinner, Divider } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../context/Context';
 import { getAllCities, updateCity } from '../../api/apis';
@@ -8,16 +8,18 @@ import { useNavigate } from 'react-router-dom';
 export default function UserDetail() {
     const formBackground = useColorModeValue('gray.100', 'gray.700');
     const { user = {}, jwt } = useContext(AuthContext)
-    const [city, setCity] = useState("")
-    const [citiesName, setCitiesName] = useState([])
+    const [cities, setCities] = useState([])
+    const [city, setCity] = useState(user?.city)
+    const [outlets, setOutlets] = useState([])
+    const [outlet, setOutlet] = useState(user?.outlet)
     const [isLoading, setIsLoading] = useState(false)
     const nav = useNavigate()
 
     const handleSubmit = async () => {
         setIsLoading(true)
-        const data = await updateCity(jwt, city)
+        const data = await updateCity(jwt, city, outlet)
         localStorage.setItem("USER", JSON.stringify(data))
-        if (data?.detail){
+        if (data?.detail) {
             setIsLoading(false)
             alert(data.detail)
         }
@@ -25,19 +27,21 @@ export default function UserDetail() {
     }
 
     const getCities = async () => {
-        let cities = await getAllCities()
-        cities = Object.keys(cities)
-        setCitiesName(cities)
+        const data = await getAllCities()
+        setCities(data)
+        setOutlets(data?.[city]?.sort())
     }
+    useEffect(() => {
+        getCities()
+    }, [])
 
     useEffect(() => {
-        setCity(user?.city)
-        getCities()
-    }, [user])
+        setOutlets(cities?.[city]?.sort())
+    }, [city, cities])
 
     return (
         <Flex h="100vh" w="100vw" alignItems={"center"} justifyContent={"center"}>
-        <BackNav to='/store' />
+            <BackNav to='/store' />
             <Stack spacing={10} w={{ base: "90vw", lg: "70vw" }} bg={formBackground} p="5rem 3rem" borderRadius={10}>
                 <HStack spacing={6}>
                     <Avatar name={user?.username} />
@@ -45,19 +49,30 @@ export default function UserDetail() {
                         @{user?.username}
                     </Text>
                 </HStack>
-                <HStack spacing={10}>
-                    <Text fontWeight={"bold"} fontSize={"xl"}>
-                        City:
-                    </Text>
-                    <Select variant="outline" value={city} onChange={e => setCity(e.target.value)}>
-                        {
-                            citiesName?.map((val, ind) => {
-                                return <option key={ind} value={val}>{val}</option>
-                            })
-                        }
-                    </Select>
-                </HStack>
-                <Button type='button' variant="solid" colorScheme='cyan' onClick={handleSubmit} isDisabled={!jwt}>
+                <Flex alignItems="center" justifyContent="center" gap={1} flexDirection={{ base: "column", md: "row" }}>
+                    <HStack w="100%">
+                        <Text fontWeight={"bold"} fontSize={"xl"}>
+                            City:
+                        </Text>
+                        <Select variant="outline" value={city} onChange={e => setCity(e.target.value)}>
+                            {
+                                Object.keys(cities).sort()?.map((val, ind) => <option value={val} key={ind}>{val}</option>)
+                            }
+                        </Select>
+                    </HStack>
+                    <Divider orientation={{ base: "horizontal", md: 'vertical' }} />
+                    <HStack w="100%">
+                        <Text fontWeight={"bold"} fontSize={"xl"}>
+                            Outlet:
+                        </Text>
+                        <Select variant="outline" value={outlet} onChange={e => setOutlet(e.target.value)}>
+                            {
+                                outlets?.map((val, ind) => <option value={val} key={ind}>{val}</option>)
+                            }
+                        </Select>
+                    </HStack>
+                </Flex>
+                <Button type='button' variant="solid" colorScheme='cyan' onClick={handleSubmit} isDisabled={!city || !outlet}>
                     {isLoading ? <Spinner size="md" /> : "Save"}
                 </Button>
             </Stack>

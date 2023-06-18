@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
-
     Stack,
     Text,
 
@@ -8,9 +7,13 @@ import {
 import StoreCard from '../components/StoreCard';
 import { getStores } from '../../api/apis';
 import ProfileBtn from '../components/ProfileBtn';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/Context';
 
 const StoresPage = () => {
     const [stores, setStores] = useState([])
+    const nav = useNavigate()
+    const {user} = useContext(AuthContext)
 
     const getData = async () => {
         const data = await getStores()
@@ -26,6 +29,16 @@ const StoresPage = () => {
         <Stack h="100vh" alignItems="center" justifyContent="flex-start" pt="6" w="100vw">
             <ProfileBtn />
             <Text as={"h2"} pb={6} fontWeight="bold" fontSize="4xl">Stores</Text>
+            {/* <Flex alignItems="flex-end" justifyContent="space-between" flexDirection="row" w={{ base: "90%", lg: "70vw" }}>
+                <Box>
+                    <HStack pt={10}>
+                        <Text as="h2" fontSize={{ base: "xl", lg: "2xl" }} fontWeight={"semibold"}>{user?.city}</Text> <Divider orientation='vertical' /> <Text as="h2" fontSize={{ base: "xl", lg: "2xl" }} fontWeight={"semibold"}>{user?.outletName}</Text>
+                    </HStack>
+                </Box>
+                <Button variant="solid" onClick={() => nav("/user")} colorScheme="cyan">
+                    Change Location
+                </Button>
+            </Flex> */}
             {stores?.map((val, ind) => {
                 return <StoreCard
                     key={ind}
@@ -33,7 +46,7 @@ const StoresPage = () => {
                     image={val?.image}
                     city={val?.totalCities}
                     outlets={val?.totalOutlets}
-                    navigateURL={`/store/${val?.storeName}`} />
+                    navigateURL={`/store/${val?.storeName}/${user?.city}/${user?.outlet}/offers`} />
             })}
         </Stack>
     );

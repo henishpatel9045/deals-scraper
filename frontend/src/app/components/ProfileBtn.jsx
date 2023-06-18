@@ -1,5 +1,6 @@
-import { AtSignIcon, MoonIcon, SunIcon } from '@chakra-ui/icons'
-import { Avatar, Button, HStack, IconButton, Menu, MenuButton, MenuItem, MenuList, useColorMode } from '@chakra-ui/react'
+import { MoonIcon, SunIcon } from '@chakra-ui/icons'
+import {FaUserAlt} from "react-icons/fa"
+import { Button, HStack, IconButton, Menu, MenuButton, MenuItem, MenuList, useColorMode } from '@chakra-ui/react'
 import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AuthContext } from '../../context/Context'
@@ -15,7 +16,7 @@ export default function ProfileBtn() {
                 {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
             </Button>
             <IconButton onClick={() => nav("/user")}>
-                <AtSignIcon />
+                <FaUserAlt />
             </IconButton>
         </HStack>
     )
