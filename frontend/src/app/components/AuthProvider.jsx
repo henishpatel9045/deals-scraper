@@ -13,7 +13,7 @@ function AuthProvider({ children }) {
             setUser(JSON.parse(usr))
             setJwt(localStorage.getItem("JWT"))
         }
-    }, [localStorage.getItem("USER")])
+    }, [])
 
     return (
         <AuthContext.Provider value={{

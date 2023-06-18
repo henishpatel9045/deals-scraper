@@ -1,5 +1,5 @@
 import { Avatar, HStack, Select, Stack, Flex, Text, useColorModeValue, Input, Button, Spinner, Divider } from '@chakra-ui/react';
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { AuthContext } from '../../context/Context';
 import { getAllCities, updateCity } from '../../api/apis';
 import BackNav from '../components/BackNav';
@@ -7,29 +7,31 @@ import { useNavigate } from 'react-router-dom';
 
 export default function UserDetail() {
     const formBackground = useColorModeValue('gray.100', 'gray.700');
-    const { user = {}, jwt } = useContext(AuthContext)
+    const { user = {}, jwt, setUser } = useContext(AuthContext)
     const [cities, setCities] = useState([])
     const [city, setCity] = useState(user?.city)
     const [outlets, setOutlets] = useState([])
     const [outlet, setOutlet] = useState(user?.outlet)
     const [isLoading, setIsLoading] = useState(false)
     const nav = useNavigate()
+    const initialRed = useRef()
 
     const handleSubmit = async () => {
         setIsLoading(true)
         const data = await updateCity(jwt, city, outlet)
+        console.log(outlet);
         localStorage.setItem("USER", JSON.stringify(data))
         if (data?.detail) {
             setIsLoading(false)
             alert(data.detail)
         }
+        setUser(data)
         return nav("/store")
     }
 
     const getCities = async () => {
         const data = await getAllCities()
         setCities(data)
-        setOutlets(data?.[city]?.sort())
     }
     useEffect(() => {
         getCities()
@@ -38,6 +40,13 @@ export default function UserDetail() {
     useEffect(() => {
         setOutlets(cities?.[city]?.sort())
     }, [city, cities])
+
+    useEffect(() => {
+        if (city === user?.city)
+            setOutlet(user?.outlet)
+        else
+            setOutlet(outlets?.[0])
+    }, [outlets])
 
     return (
         <Flex h="100vh" w="100vw" alignItems={"center"} justifyContent={"center"}>

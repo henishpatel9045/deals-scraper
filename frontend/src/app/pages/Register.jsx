@@ -6,9 +6,13 @@ import {
     Button,
     useColorModeValue,
     Spinner,
+    InputGroup,
+    IconButton,
 } from '@chakra-ui/react';
 import { createUser } from '../../api/apis';
 import { useNavigate } from 'react-router-dom';
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"
+
 
 const Register = () => {
     const formBackground = useColorModeValue('gray.100', 'gray.700');
@@ -17,6 +21,7 @@ const Register = () => {
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const nav = useNavigate()
+    const [isShow, setIsShow] = useState(false)
 
     const handleUsernameChange = (e) => {
         setUsername(e.target.value)
@@ -71,13 +76,23 @@ const Register = () => {
                     mb={3}
                     onChange={handlePasswordChange}
                 />
-                <Input
-                    placeholder="Confirm your password"
-                    type="text"
-                    variant="filled"
-                    mb={6}
-                    onChange={handleConfirmPasswordChange}
-                />
+                <InputGroup>
+                    <Input
+                        placeholder="Confirm your password"
+                        type={isShow ? "text" : "password"}
+                        variant="filled"
+                        mb={6}
+                        onChange={handleConfirmPasswordChange}
+                        borderTopRightRadius={0}
+                        borderBottomRightRadius={0}
+                    />
+                    <IconButton onClick={() => setIsShow(!isShow)}
+                        borderTopLeftRadius={0}
+                        borderBottomLeftRadius={0}
+                    >
+                        {isShow ? <AiFillEyeInvisible /> : <AiFillEye />}
+                    </IconButton>
+                </InputGroup>
                 <Button colorScheme="teal" mb={3} onClick={handleSubmit}>
                     {isLoading ? <Spinner size="md" /> : "Register"}
                 </Button>
