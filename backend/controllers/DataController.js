@@ -1,5 +1,6 @@
 const DataModel = require("../models/DataModel");
 const NativeAppDataModel = require("../models/NativeAppDataModel");
+const UserModel = require("../models/UserModel");
 
 const getAllStores = async (req, res) => {
   try {
@@ -32,7 +33,7 @@ const getAllStores = async (req, res) => {
       },
     ]);
 
-    res.status(200).send(result);
+    return res.status(200).send(result);
   } catch (error) {
     console.error(error);
     return res.status(500).send({ detail: "Error occurred." });
@@ -80,7 +81,7 @@ const getAllCities = async (req, res) => {
     return res.status(200).send(result[0]);
   } catch (error) {
     console.log(error);
-    res.status(500).send({ detail: "Somethings wrong." });
+    return res.status(500).send({ detail: "Somethings wrong." });
   }
 };
 
@@ -97,7 +98,7 @@ const getOffers = async (req, res) => {
     const offers = result[0].data
       .filter((i) => i.city === city)?.[0]
       ?.outlets.filter((i) => i.outletName === outlet)?.[0].offers;
-    res.status(200).send(offers);
+    return res.status(200).send(offers);
   } else {
     console.log("Outlet not found.");
   }
@@ -170,8 +171,8 @@ const getAppData = async (req, res) => {
 
 const getCities = async (req, res) => {
   try {
-    const doc = await NativeAppDataModel.distinct("data.location");
-
+    const doc = await UserModel.find({isAppUser: true}).distinct("city");
+    console.log(doc);
     return res.send(doc);
   } catch (error) {
     console.log("getCities: ", error);

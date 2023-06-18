@@ -12,6 +12,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    isAppData: {
+      type: Boolean,
+      default: false
+    },
     salt: String,
     city: String,
     createdAt: {

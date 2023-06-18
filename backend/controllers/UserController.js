@@ -13,13 +13,12 @@ const createUser = async (req, res) => {
   }
   user = await User.create(data);
   user.encryptedPassword = undefined;
-  user.salt = undefined
-  res.status(200).send(user._doc);
+  user.salt = undefined;
+  return res.status(200).send(user._doc);
 };
 
 const updateUser = async (req, res) => {
-  try{
-
+  try {
     const user = await User.findById(req.user._id);
     user.city = req.body?.city || user.city;
     console.log(user);
@@ -28,11 +27,11 @@ const updateUser = async (req, res) => {
     await user.save();
     user.encryptedPassword = undefined;
     user.salt = undefined;
-    
-    res.status(200).send(user);
-  }catch (error) {
+
+    return res.status(200).send(user);
+  } catch (error) {
     console.log(error);
-    return res.status(403).send({detail: "Error occurred."})
+    return res.status(403).send({ detail: "Error occurred." });
   }
 };
 
@@ -40,7 +39,7 @@ const getUser = async (req, res) => {
   const user = req.user;
   user.encryptedPassword = undefined;
   user.salt = undefined;
-  res.status(200).send(user);
+  return res.status(200).send(user);
 };
 
 const loginUser = async (req, res) => {
@@ -62,12 +61,12 @@ const loginUser = async (req, res) => {
     return res.status(200).send({
       success: true,
       token: generateToken(user._doc),
-      ...user._doc
+      ...user._doc,
     });
-  }else{
+  } else {
     return res.status(401).send({
-      detail: "Username or password is invalid."
-    })
+      detail: "Username or password is invalid.",
+    });
   }
 };
 
