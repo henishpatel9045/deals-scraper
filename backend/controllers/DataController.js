@@ -147,22 +147,25 @@ const createAppData = async (req, res) => {
 const getAppData = async (req, res) => {
   try {
     const location = req.query.location;
-    const data = await NativeAppDataModel.aggregate([
-      {
-        $match: {
-          "data.location": location,
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          storeName: 1,
-          location: { $literal: location },
-          data: { $arrayElemAt: ["$data.offers", 0] },
-        },
-      },
-    ]);
-    return res.send(data);
+    const data = await NativeAppDataModel.find();
+    let resData = []
+
+    for (let d in data){
+      let a = data[d]
+      // console.log("Data: ", a);
+      for (let b in a?.data){
+        let c = a?.data[b]
+        if (c?.location === location){
+          resData.push({
+            storeName: a.storeName,
+            location: location,
+            data: c?.offers
+          })
+        }
+      }
+    }
+  
+    return res.send(resData);
   } catch (error) {
     console.log("getAppData: ", error);
     return res.status(400).send({ detail: "Error occurred." });
@@ -171,7 +174,9 @@ const getAppData = async (req, res) => {
 
 const getCities = async (req, res) => {
   try {
-    const doc = await UserModel.find({isAppUser: true}).distinct("city");
+    const doc = await UserModel.find({
+      isAppUser: true,
+    }).distinct("city");
     console.log(doc);
     return res.send(doc);
   } catch (error) {
