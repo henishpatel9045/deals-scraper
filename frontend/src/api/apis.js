@@ -1,8 +1,8 @@
 import * as apisauce from "apisauce";
 
 const api = apisauce.create({
-  // baseURL: "https://api-sugarwallet.onrender.com/",
-  baseURL: "http://localhost:5000/"
+  baseURL: "https://api-sugarwallet.onrender.com/",
+  // baseURL: "http://localhost:5000/"
 });
 
 const getToken = async (username, password) => {

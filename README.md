@@ -7,16 +7,25 @@ Deals Scraper is a web application that allows users to scrape deals from differ
 ## Features
 
 - Scrapes deals from various online food stores
+- JWT Authentication middleware for protected routes
 - Filters deals based on the user's locality and store outlet
-- Provides an intuitive user interface for easy navigation
 - Supports client-server architecture
 - Built with the MERN stack (MongoDB, Express.js, React.js, Node.js)
+
+## Major Libraries used
+
+- express.js
+- puppeteer (For Scraping purpose)
+- mongoose (To connect with mongoDB)
+- body-parser (To parse req body and url)
+- helmet (To add necessary security headers)
+- jsonwebtoken (To sign and verify JWT tokens)
 
 ## Prerequisites
 
 Before running the Deals Scraper application, make sure you have the following software installed:
 
-- Node.js (v12 or above)
+- Node.js (v17 or above)
 - MongoDB
 - npm (Node Package Manager)
 - Docker (for backend deployment)
@@ -25,12 +34,8 @@ Before running the Deals Scraper application, make sure you have the following s
 
 1. Clone the repository:
 ```
-git clone https://github.com/henishpatel9045/deals-scraper.git
-```
-
-2. Navigate to the backend directory:
-```
-cd deals-scraper/backend
+git clone https://github.com/henishpatel9045/deals-scraper
+cd backend
 ```
 
 3. Build and run the Docker container for the backend:
@@ -39,65 +44,147 @@ docker build -t deals-scraper-backend .
 docker run -p 5000:5000 -d deals-scraper-backend
 ```
 
-4. Navigate to the frontend directory:
-```
-cd ../frontend
-```
 
-5. Install client dependencies:
-```
-npm install
-```
+## API Reference
 
-4. Change backend baseUrl
-```
-frontend/src/api/apis.js
-```
-Change baseUrl in line no. 4 to "http://localhost:5000/
+1. ### Auth Route
 
-5. Run/Build the fronend 
-```
-npm run dev
-```
-OR
-```
-npm run build
-```
+* #### Register new user
 
-
-## Usage
-
-1. Start the frontend server:
+```http
+  POST /auth/register
 ```
-npm run dev
+Body
+```JSON
+{
+    "username": "henish9045",
+    "password": "12345678",
+    "city": "Ahmedabad",
+}
+```
+Response
+```JSON
+{
+    "username": "henish9045",
+    "city": "Ahmedabad",
+    "createdAt": "2023-06-19T04:32:11.746Z",
+    "updatedAt": "2023-06-19T04:32:11.746Z",
+    "_id": "648fda91622fb2ffd62eaa7a",
+    "__v": 0
+}
 ```
 
-2. Open your browser and visit http://localhost:3000 to access the Deals Scraper application.
+* #### Login user
 
-3. On the homepage, you will see a search bar where you can enter your locality.
+```http
+  POST /auth/login
+```
+Body
+```JSON
+{
+    "username": "henish9045",
+    "password": "12345678",
+}
+```
+Response
+```JSON
+{
+    "success": true,
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDhmZGE5MTYyMmZiMmZmZDYyZWFhN2EiLCJ1c2VybmFtZSI6ImhlbmlzaDkwNDUiLCJpc0FwcERhdGEiOmZhbHNlLCJjaXR5IjoiQWhtZWRhYmFkIiwiY3JlYXRlZEF0IjoiMjAyMy0wNi0xOVQwNDozMjoxMS43NDZaIiwidXBkYXRlZEF0IjoiMjAyMy0wNi0xOVQwNDozMjoxMS43NDZaIiwiX192IjowLCJpYXQiOjE2ODcxNDkzMzMsImV4cCI6MTY5NDkyNTMzM30.uGNc0wdzP02yCLzoO_OTHy4B8FdbmV9r7kvDtm5gs9I",
+    "_id": "648fda91622fb2ffd62eaa7a",
+    "username": "henish9045",
+    "city": "Ahmedabad",
+    "createdAt": "2023-06-19T04:32:11.746Z",
+    "updatedAt": "2023-06-19T04:32:11.746Z",
+    "__v": 0
+}
+```
 
-4. Select the desired outlet of the store from the provided options.
+* #### Update city and outlet of user
 
-5. Click on the "Search" button to scrape deals specific to your location and store outlet.
+```http
+  PATCH /auth/user
+```
+Headers
+| Header             | Value                 |
+| :----------------- | :-------------------- |
+| Authorization      | Bearer YOUR_JWT_TOKEN |
 
-6. The deals will be displayed on the page with relevant details such as the item name, price, and discount.
+Body
+```JSON
+{
+    "city": "Mehsana",
+    "outlet": "Radhanpur Road"
+}
+```
+Response
+```JSON
+{
+    "_id": "648fda91622fb2ffd62eaa7a",
+    "username": "henish9045",
+    "city": "Mehsana",
+    "createdAt": "2023-06-19T04:32:11.746Z",
+    "updatedAt": "2023-06-19T04:40:28.927Z",
+    "__v": 0,
+    "outlet": "Radhanpur Road"
+}
+```
 
-7. You can scroll through the deals or use the pagination controls to navigate through the results.
+2. ### Store Data
 
-## Contributing
+* #### Get all store data
 
-We welcome contributions to the Deals Scraper project. To contribute, please follow these steps:
+```http
+  GET /store
+```
 
-1. Fork the repository from the Deals Scraper GitHub page.
-2. Create a new branch for your feature or bug fix.
-3. Make the necessary changes and commit them.
-4. Push your changes to your forked repository.
-5. Submit a pull request detailing your changes and their benefits.
+Response
+```JSON
+[
+    {
+        "_id": "648947348383e448ceb27dc8",
+        "storeName": "La Pino'z Pizza",
+        "image": "https://www.uengage.in/images/addo/logos/logo-5-1600769708.png",
+        "totalCities": 190,
+        "totalOutlets": 496
+    }
+]
+```
+
+* #### Get all offers of particular city and outlet
+
+```http
+  GET /store/offer?city=CITY_NAME&outlet=OUTLET_NAME
+```
+
+| Parameter     | Description                 | Example          |
+| :------------ | :-------------------------- | :--------------- |
+| CITY_NAME     | City name from database.    | Ayodhya          |
+| OUTLET_NAME   | Outlet name from that city. | Pushraj Chauraha |
+
+Example URL = https://api-sugarwallet.onrender.com/store/offers?city=Ayodhya&outlet=Pushraj Chauraha
 
 
-## Licence
-
-The Deals Scraper project is licensed under the MIT License. Please refer to the LICENSE file for more information.
+Response
+```JSON
+[
+    {
+        "offer": "50% Off on orders above Rs.200 for New Users\nNot valid on BOGO, Classic Pizzas, Beverages, Slash Menu",
+        "promo": "  LPNEW50",
+        "url": "https://lapinozpizza.in/order/pushraj-chauraha-ayodhya"
+    },
+    {
+        "offer": "Get Flat Discount of Rs.75 on Minimum Billing of Rs.399. Cannot be clubbed with any other offers. Not Valid on BOGO, Classic maniacs pizza , Beverages and Combos",
+        "promo": "  LPN75",
+        "url": "https://lapinozpizza.in/order/pushraj-chauraha-ayodhya"
+    },
+    {
+        "offer": "Get Flat Discount of Rs.100 on Minimum Billing of Rs.599. Cannot be clubbed with any other offers. Not Valid on BOGO, Classic maniacs pizza , Beverages and Combos",
+        "promo": "  LPN100",
+        "url": "https://lapinozpizza.in/order/pushraj-chauraha-ayodhya"
+    }
+]
+```
 
 
 ## Contact

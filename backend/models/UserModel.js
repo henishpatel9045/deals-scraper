@@ -12,7 +12,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    isAppData: {
+    isAppUser: {
       type: Boolean,
       default: false
     },
