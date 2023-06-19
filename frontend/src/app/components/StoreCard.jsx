@@ -1,4 +1,4 @@
-import { Button, Flex, HStack, Stack, Tag, Text, Image, TagLabel, useColorModeValue, Box, Divider } from '@chakra-ui/react'
+import { Button, Flex, HStack, Stack, Tag, Text, Image, TagLabel, useColorModeValue, Box, Divider, useColorMode } from '@chakra-ui/react'
 import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/Context';
@@ -7,6 +7,7 @@ export default function StoreCard({ storeName = "", image = "", city = 0, outlet
     const formBackground = useColorModeValue('gray.100', 'gray.700');
     const { user } = useContext(AuthContext)
     const nav = useNavigate()
+    const { colorMode, toggleColorMode } = useColorMode();
 
     return (
         <HStack
@@ -35,9 +36,21 @@ export default function StoreCard({ storeName = "", image = "", city = 0, outlet
                 <HStack spacing={4} mr="1rem">
                     <HStack>
                         <Stack>
-                            <Text as="h4" fontSize={{ base: "sm", lg: "md" }} fontWeight={"semibold"} color={'tomato'}>Selected City: <span style={{ color: "white" }}>{user?.city}</span></Text>
+                            <Text as="h4" fontSize={{ base: "sm", lg: "md" }} fontWeight={"semibold"} color={colorMode === "dark"
+                                ? "white"
+                                : 'black'}>Selected City: <span style={{
+                                    color: colorMode === "dark"
+                                        ? "white"
+                                        : 'black'
+                                }}>{user?.city}</span></Text>
                             <Divider orientation='horizontal' />
-                            <Text as="h4" fontSize={{ base: "sm", lg: "md" }} fontWeight={"semibold"} color={'tomato'}>Selected Outlet: <span style={{ color: "white" }}>{user?.outlet || "Kadi"}</span></Text>
+                            <Text as="h4" fontSize={{ base: "sm", lg: "md" }} fontWeight={"semibold"} color={colorMode === "dark"
+                                ? "white"
+                                : 'black'}>Selected Outlet: <span style={{
+                                    color: colorMode === "dark"
+                                        ? "white"
+                                        : 'black'
+                                }}>{user?.outlet || "Kadi"}</span></Text>
                         </Stack>
                     </HStack>
                     <Button variant="solid" onClick={() => nav("/user")} colorScheme="blue">
