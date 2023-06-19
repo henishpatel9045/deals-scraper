@@ -13,7 +13,7 @@ const UserSchema = new mongoose.Schema(
       required: true,
     },
     isAppUser: {
-      type: Boolean,
+      type: mongoose.Schema.Types.Boolean,
       default: false
     },
     salt: String,
