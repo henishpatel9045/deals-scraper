@@ -30,6 +30,12 @@ Before running the Deals Scraper application, make sure you have the following s
 - npm (Node Package Manager)
 - Docker (for backend deployment)
 
+## Demo
+- ### Frontend
+  https://dealscraper.netlify.app
+- ### Backend
+  https://api-sugarwallet.onrender.com
+
 ## Installation
 
 1. Clone the repository:
